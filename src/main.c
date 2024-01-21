@@ -49,14 +49,16 @@ int main(void) {
 
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(800, 600, "k-means");
-  Samples cluster = {0};
-  generate_cluster(CLITERAL(Vector2){0}, 10, 10, &cluster);
+  Samples set = {0};
+  generate_cluster(CLITERAL(Vector2){0}, 10, 100, &set);
+  generate_cluster(CLITERAL(Vector2){MIN_X * 0.5f, MAX_Y * 0.5f}, 5, 50, &set);
+  generate_cluster(CLITERAL(Vector2){MAX_X * 0.5f, MAX_Y * 0.5f}, 5, 50, &set);
 
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(GetColor(MYBACKGROUNDCOLOR));
-    for (size_t i = 0; i < cluster.count; ++i) {
-      Vector2 it = cluster.items[i];
+    for (size_t i = 0; i < set.count; ++i) {
+      Vector2 it = set.items[i];
       DrawCircleV(project_sample_to_screen(it), 10, RED);
     }
     EndDrawing();
