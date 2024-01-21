@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# MyProject xclude
+nob
+nob.old
+kmean
+build/
