@@ -6,9 +6,10 @@ Nob_Proc build_program(const char *source_path, const char *output_path) {
   nob_cmd_append(&cmd, "cc");
   nob_cmd_append(&cmd, "-Wall", "-Wextra", "-ggdb");
   nob_cmd_append(&cmd, "-I./lib/");
+  nob_cmd_append(&cmd, "-O3");
   nob_cmd_append(&cmd, "-o", output_path, source_path);
   nob_cmd_append(&cmd, "-L./lib/");
-  nob_cmd_append(&cmd, "-lraylib", "-lm");
+  nob_cmd_append(&cmd, "-lraylib", "-lm", "-lz", "-ldl");
   nob_cmd_append(&cmd, "-framework", "CoreVideo");
   nob_cmd_append(&cmd, "-framework", "IOKit");
   nob_cmd_append(&cmd, "-framework", "Cocoa");

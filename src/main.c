@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "../lib/raylib.h"
@@ -37,8 +38,8 @@ void generate_cluster(Vector2 center, float radius, size_t count,
     float angle = rand_float() * 2 * PI;
     float mag = rand_float();
     Vector2 sample = {
-        .x = center.x * cosf(angle) * mag * radius,
-        .y = center.y * sinf(angle) * mag * radius,
+        .x = center.x + cosf(angle) * mag * radius,
+        .y = center.y + sinf(angle) * mag * radius,
     };
     nob_da_append(samples, sample);
   }
