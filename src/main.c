@@ -1,4 +1,4 @@
-#include "./lib/raylib.h"
+#include "../lib/raylib.h"
 #include <stdio.h>
 
 #define MIN_X -20.0
