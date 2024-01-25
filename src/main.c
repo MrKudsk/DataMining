@@ -169,11 +169,8 @@ int main(void) {
       max_y = p.y;
   }
   nob_temp_reset();
-
-  for (size_t i = 0; i < set.count; ++i) {
-    Vector2 p = set.items[i];
-    nob_log(NOB_INFO, "(%f, %f)", p.x, p.y);
-  }
+  nob_log(NOB_INFO, "x = %f .. %f)", min_x, max_x);
+  nob_log(NOB_INFO, "y = %f .. %f)", min_y, max_y);
 
   srand(time(0));
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
