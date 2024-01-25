@@ -23,7 +23,8 @@ int main(int argc, char **argv) {
   if (!nob_mkdir_if_not_exists("./build/"))
     return 1;
   Nob_Procs procs = {0};
-  nob_da_append(&procs, build_program("./src/main.c", "./build/kmeans"));
+  // nob_da_append(&procs, build_program("./src/main.c", "./build/kmeans"));
+  nob_da_append(&procs, build_program("./src/knn.c", "./build/knn"));
   if (!nob_procs_wait(procs)) {
     return 1;
   }
