@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <zlib.h>
 
 #define NOB_IMPLEMENTATION
@@ -80,7 +81,17 @@ float ncd(Nob_String_View a, Nob_String_View b) {
   return (cab - mn) / mx;
 }
 
-size_t klassify_sample(Samples train, Nob_String_View text) {
+int compare_ncds(const void *a, const void *b) {
+  const NCD *na = a;
+  const NCD *nb = b;
+  if (na->distance < nb->distance)
+    return -1;
+  if (na->distance > nb->distance)
+    return 1;
+  return 0;
+}
+
+size_t klassify_sample(Samples train, Nob_String_View text, size_t k) {
   NCDs ncds = {0};
 
   for (size_t i = 0; i < train.count; ++i) {
@@ -92,11 +103,19 @@ size_t klassify_sample(Samples train, Nob_String_View text) {
                          }));
   }
 
-  nob_log(NOB_INFO, "Top cinco NCDs");
-  for (size_t i = 0; i < 5 && i < ncds.count; ++i) {
-    nob_log(NOB_INFO, "klass = %zu, distance = %f", ncds.items[i].klass,
-            ncds.items[i].distance);
+  qsort(ncds.items, ncds.count, sizeof(*ncds.items), compare_ncds);
+
+  size_t klass_freq[4] = {0};
+  for (size_t i = 0; i < k && i < ncds.count; ++i) {
+    klass_freq[ncds.items[i].klass] += 1;
   }
+  /*
+    nob_log(NOB_INFO, "Top cinco NCDs");
+    for (size_t i = 0; i < 5 && i < ncds.count; ++i) {
+      nob_log(NOB_INFO, "klass = %zu, distance = %f", ncds.items[i].klass,
+              ncds.items[i].distance);
+    }
+    */
   return 0;
 }
 
