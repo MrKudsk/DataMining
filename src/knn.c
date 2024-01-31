@@ -21,6 +21,17 @@ Nob_String_View deflate_sv(Nob_String_View sv) {
   return nob_sv_from_parts(output, defstream.total_out);
 }
 
+typedef struct {
+  size_t klass;
+  Nob_String_View text;
+} Sample;
+
+typedef struct {
+  Sample *items;
+  size_t count;
+  size_t capacity;
+} Samples;
+
 int main(int argc, char **argv) {
   const char *program = nob_shift_args(&argc, &argv);
 
@@ -35,6 +46,9 @@ int main(int argc, char **argv) {
   if (!nob_read_entire_file(file_path, &sb)) {
     return 1;
   }
+
+  Samples samples = {0};
+
   Nob_String_View content = nob_sv_from_parts(sb.items, sb.count);
   size_t lines_count = 0;
   for (; content.count > 0; ++lines_count) {
