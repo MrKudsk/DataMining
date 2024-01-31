@@ -109,14 +109,15 @@ size_t klassify_sample(Samples train, Nob_String_View text, size_t k) {
   for (size_t i = 0; i < k && i < ncds.count; ++i) {
     klass_freq[ncds.items[i].klass] += 1;
   }
-  /*
-    nob_log(NOB_INFO, "Top cinco NCDs");
-    for (size_t i = 0; i < 5 && i < ncds.count; ++i) {
-      nob_log(NOB_INFO, "klass = %zu, distance = %f", ncds.items[i].klass,
-              ncds.items[i].distance);
+
+  size_t predicted_klass = 0;
+  for (size_t i = 0; i < NOB_ARRAY_LEN(klass_names); ++i) {
+    if (klass_freq[predicted_klass] < klass_freq[i]) {
+      predicted_klass = i;
     }
-    */
-  return 0;
+  }
+
+  return predicted_klass;
 }
 
 int main(int argc, char **argv) {
@@ -149,7 +150,7 @@ int main(int argc, char **argv) {
       parse_samples(nob_sv_from_parts(test_content.items, test_content.count));
 
   Sample sample = test_samples.items[0];
-  size_t predicted_class = klassify_sample(train_samples, sample.text);
+  size_t predicted_class = klassify_sample(train_samples, sample.text, 1000);
 
   nob_log(NOB_INFO, "Text: " SV_Fmt, SV_Arg(sample.text));
   nob_log(NOB_INFO, "Predicted klass: %s", klass_names[predicted_class]);
