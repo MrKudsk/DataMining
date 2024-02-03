@@ -65,11 +65,10 @@ typedef struct {
   size_t capacity;
 } NCDs;
 
-float ncd(Nob_String_View a, Nob_String_View b) {
+float ncd(Nob_String_View a, Nob_String_View b, float cb) {
   Nob_String_View ab = nob_sv_from_cstr(
       nob_temp_sprintf(SV_Fmt " " SV_Fmt, SV_Arg(a), SV_Arg(b)));
   float ca = deflate_sv(a).count;
-  float cb = deflate_sv(b).count;
   float cab = deflate_sv(ab).count;
 
   float mn = ca;
@@ -94,14 +93,17 @@ int compare_ncds(const void *a, const void *b) {
 size_t klassify_sample(Samples train, Nob_String_View text, size_t k) {
   NCDs ncds = {0};
 
+  float cb = deflate_sv(text).count;
   for (size_t i = 0; i < train.count; ++i) {
-    float distance = ncd(train.items[i].text, text);
+    float distance = ncd(train.items[i].text, text, cb);
     nob_temp_reset();
     nob_da_append(&ncds, ((NCD){
                              .distance = distance,
                              .klass = train.items[i].klass,
                          }));
+    printf("\rClassifying %zu/%zu", i, train.count);
   }
+  printf("\n");
 
   qsort(ncds.items, ncds.count, sizeof(*ncds.items), compare_ncds);
 
